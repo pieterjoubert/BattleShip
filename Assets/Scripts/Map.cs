@@ -16,22 +16,31 @@ public class Map : MonoBehaviour {
         {
             for(int y = 0; y < 10; y++)
             {
-                if(Random.Range(0f,100f) < 10)
-                {
-                    Tile t = new Tile();
-                    t.State = Tile.States.Ship;
-                    t.X = x;
-                    t.Y = y;
-                    map[x, y] = t;
-                }
-                else
-                {
+                
                     Tile t = new Tile();
                     t.State = Tile.States.Open;
                     t.X = x;
                     t.Y = y;
                     map[x, y] = t;
+            }
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            int xPos = Random.Range(0, 9);
+            int yPos = Random.Range(0, 9);
+            if (xPos + i + 1 < 9 && yPos + i + 1 < 9)
+            { 
+                for (int j = 0; j < i + 1; j++)
+                {
+                    map[xPos + j, yPos].X = xPos + j;
+                    map[xPos + j, yPos].Y = yPos;
+                    map[xPos + j, yPos].State = Tile.States.Ship;
                 }
+            }
+            else
+            {
+                i--;
             }
         }
         Redraw();
