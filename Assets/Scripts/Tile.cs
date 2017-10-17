@@ -9,5 +9,6 @@ public class Tile {
     public States State { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
+    public int Direction { get; set; } //0 = left-right, 1 = up-down
 
 }

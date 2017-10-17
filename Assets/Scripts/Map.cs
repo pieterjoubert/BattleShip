@@ -29,13 +29,62 @@ public class Map : MonoBehaviour {
         {
             int xPos = Random.Range(0, 9);
             int yPos = Random.Range(0, 9);
+            int dir = Random.Range(0, 100);
             if (xPos + i + 1 < 9 && yPos + i + 1 < 9)
-            { 
-                for (int j = 0; j < i + 1; j++)
+            {
+                //check direction
+                
+                if (dir < 50) // left-right
                 {
-                    map[xPos + j, yPos].X = xPos + j;
-                    map[xPos + j, yPos].Y = yPos;
-                    map[xPos + j, yPos].State = Tile.States.Ship;
+                    bool blocked = false;
+                    for (int j = 0; j < i + 1; j++)
+                    {
+                        if (map[xPos + j, yPos].State == Tile.States.Ship)
+                        {
+                            blocked = true;
+                            break;
+                        }
+                    }
+                    if (!blocked)
+                    {
+                        for (int j = 0; j < i + 1; j++)
+                        {
+                            map[xPos + j, yPos].X = xPos + j;
+                            map[xPos + j, yPos].Y = yPos;
+                            map[xPos + j, yPos].State = Tile.States.Ship;
+                            map[xPos + j, yPos].Direction = 0;
+                        }
+                    }
+                    else
+                    {
+                        i--;
+                    }
+                }
+                else // up down
+                {
+                    bool blocked = false;
+                    for (int j = 0; j < i + 1; j++)
+                    {
+                        if (map[xPos, yPos + j].State == Tile.States.Ship)
+                        {
+                            blocked = true;
+                            break;
+                        }
+                    }
+                    if (!blocked)
+                    {
+                        for (int j = 0; j < i + 1; j++)
+                        {
+                            map[xPos, yPos + j].X = xPos;
+                            map[xPos, yPos + j].Y = yPos + j;
+                            map[xPos, yPos + j].State = Tile.States.Ship;
+                            map[xPos, yPos + j].Direction = 1;
+                        }
+                    }
+                    else
+                    {
+                        i--;
+                    }
                 }
             }
             else
@@ -62,7 +111,15 @@ public class Map : MonoBehaviour {
             }
             else if(t.State == Tile.States.Ship)
             {
-                Instantiate(hit, new Vector3(t.X, 0f, t.Y), Quaternion.identity);
+                Instantiate(open, new Vector3(t.X, 0f, t.Y), Quaternion.identity);
+                /*if (t.Direction == 0)
+                {
+                    Instantiate(hit, new Vector3(t.X, 0f, t.Y), Quaternion.identity);
+                }
+                else
+                {
+                    Instantiate(hit, new Vector3(t.X, 0f, t.Y), Quaternion.Euler(0, 90, 0));
+                }*/
             }
         }
     }
