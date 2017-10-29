@@ -103,24 +103,51 @@ public class Map : MonoBehaviour {
 
     void Redraw()
     {
-        foreach(Tile t in map)
+        GameObject[] tiles = GameObject.FindGameObjectsWithTag("Tile");
+        foreach (GameObject t in tiles)
+            GameObject.Destroy(t);
+
+        foreach (Tile t in map)
         {
-            if(t.State == Tile.States.Open)
+            if (t.State == Tile.States.Open)
             {
                 Instantiate(open, new Vector3(t.X, 0f, t.Y), Quaternion.identity);
             }
-            else if(t.State == Tile.States.Ship)
+            else if (t.State == Tile.States.Ship)
             {
                 Instantiate(open, new Vector3(t.X, 0f, t.Y), Quaternion.identity);
-                /*if (t.Direction == 0)
-                {
-                    Instantiate(hit, new Vector3(t.X, 0f, t.Y), Quaternion.identity);
-                }
-                else
-                {
-                    Instantiate(hit, new Vector3(t.X, 0f, t.Y), Quaternion.Euler(0, 90, 0));
-                }*/
+            }
+            else if (t.State == Tile.States.Hit)
+            {
+               if (t.Direction == 0)
+               {
+                   Instantiate(hit, new Vector3(t.X, 0f, t.Y), Quaternion.identity);
+               }
+               else
+               {
+                   Instantiate(hit, new Vector3(t.X, 0f, t.Y), Quaternion.Euler(0, 90, 0));
+               }
+            }
+            else if (t.State == Tile.States.Missed)
+            {
+                Instantiate(miss, new Vector3(t.X, 0f, t.Y), Quaternion.identity);
             }
         }
+    }
+
+    public void UpdateTile(int x, int y)
+    {
+        Debug.Log(map[x, y].State);
+        if(map[x,y].State == Tile.States.Open)
+        {
+            map[x, y].State = Tile.States.Missed;
+        }
+        else if (map[x, y].State == Tile.States.Ship)
+        {
+            map[x, y].State = Tile.States.Hit;
+        }
+        Debug.Log("UpdateTile");
+        Debug.Log(map[x, y].State);
+        Redraw();
     }
 }
